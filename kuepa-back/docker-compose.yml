@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+
+  postgres:
+    image: postgres
+    container_name: kuepa
+    restart: always
+    environment:
+      POSTGRES_DB: kuepadb
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - /var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgAdmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@kuepa.com
+      PGADMIN_DEFAULT_USER: root
+      PGADMIN_DEFAULT_PASSWORD: root
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - 8080:80
+    volumes:
+      - /var/lib/pgadmin
+    depends_on:
+      - postgres
