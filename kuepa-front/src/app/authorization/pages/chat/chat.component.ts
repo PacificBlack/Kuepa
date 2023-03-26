@@ -23,7 +23,7 @@ export class ChatComponent implements OnInit {
 
   @ViewChild('container') container!: ElementRef;
 
-  ID_SALA: number = 14;
+  ID_SALA: number = 1;
 
   mensaje: string = '';
   mensajes: SalasAndMensajesInterface[] = [];
