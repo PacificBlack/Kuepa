@@ -1,0 +1,45 @@
+<div class="container" #container>
+  <div class="video-container">
+    <iframe
+      width="85%"
+      height="300px"
+      src="https://www.youtube.com/embed/iWyz_l7QP4Y"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <div class="chat-container">
+    <div class="messages-container">
+      <div *ngFor="let sala of mensajes" class="message">
+        <div class="message-header">
+          <span class="message-author"
+            >{{ sala.mensajes.usuario.nombre }} ({{
+              sala.mensajes.usuario.username
+            }})</span
+          >
+          <span class="message-tipo">{{
+            sala.mensajes.usuario.tipo_usuario!.tipo
+          }}</span>
+        </div>
+        <div class="message-content">{{ sala.mensajes.contenido }}</div>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <input
+        type="text"
+        placeholder="Escribe tu mensaje"
+        [(ngModel)]="contenido"
+        (keyup.enter)="enviarMensaje()"
+      />
+      <button
+        [disabled]="!contenido || contenido.length < 2"
+        (click)="enviarMensaje()"
+      >
+        Enviar
+      </button>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,7 @@ import {
 import { Socket, Server } from 'socket.io';
 import { DTOMensajes } from 'src/modules/mensajes/dto';
 import { MensajesService } from 'src/modules/mensajes/services/mensajes/mensajes.service';
+import { SalasAndMensajesService } from 'src/modules/salas/services/salas-and-mensajes/salas-and-mensajes.service';
 
 @WebSocketGateway({
   cors: { origin: '*', methods: ['GET', 'POST'] },
@@ -18,7 +19,10 @@ import { MensajesService } from 'src/modules/mensajes/services/mensajes/mensajes
   credentials: true,
 })
 export class ChatSalasGateway implements OnGatewayConnection {
-  constructor(private readonly mensajes_service: MensajesService) {}
+  constructor(
+    private readonly mensajes_service: MensajesService,
+    private readonly salas_and_mensaje_service: SalasAndMensajesService,
+  ) {}
 
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('Socket Gateway - Chat Sala');
@@ -29,13 +33,20 @@ export class ChatSalasGateway implements OnGatewayConnection {
 
   @SubscribeMessage('mensaje')
   async handleMessage(client: Socket, mensaje: DTOMensajes) {
-    await this.mensajes_service.crearMensaje(mensaje).then((res) => {
-      this.server.emit('chat', {
-        usuario: mensaje.usuario,
-        mensaje: mensaje.contenido,
-      });
+    await this.mensajes_service.crearMensaje(mensaje).then(async (res) => {
+      const mensajes =
+        await this.salas_and_mensaje_service.obtenerMensajesxSala(
+          mensaje.id_sala,
+        );
+      this.server.emit('chat', mensajes);
     });
+  }
 
-    console.log(mensaje.contenido);
+  @SubscribeMessage('init')
+  async handleInit(client: Socket, id_sala: number) {
+    const mensajes = await this.salas_and_mensaje_service.obtenerMensajesxSala(
+      id_sala,
+    );
+    this.server.emit('chat', mensajes);
   }
 }

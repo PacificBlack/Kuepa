@@ -1,1 +1,65 @@
-<p>login works!</p>
+<section class="hero is-fullheight">
+  <div class="hero-body">
+    <div class="container is-max-widescreen">
+      <div class="box formulario">
+        <div class="columns">
+          <div class="column">
+            <!-- Inicio de cabecera de formulario -->
+            <div>
+              <h1 class="title is-3 has-text-centered">INICIA SESION</h1>
+              <!-- Inicio de Formulario -->
+              <form [formGroup]="loginForm" (ngSubmit)="login()">
+                <div class="field">
+                  <label class="label">Username</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder="eg. kuepa"
+                      formControlName="username"
+                      required
+                    />
+                  </div>
+                  <p *ngIf="loginForm.get('username')?.errors" class="help">
+                    Ingrese un username valido para poder entrar
+                  </p>
+                </div>
+
+                <div class="field">
+                  <label class="label">Contraseña</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="password"
+                      placeholder="*******"
+                      formControlName="password"
+                      required
+                    />
+                  </div>
+                  <p *ngIf="loginForm.get('password')?.errors" class="help">
+                    Ingrese una contraseña valida para poder entrar
+                  </p>
+                </div>
+                <br />
+                <div class="buttons has-addons is-centered">
+                  <button
+                    class="button"
+                    type="submit"
+                    [disabled]="loginForm.invalid"
+                  >
+                    Entrar
+                  </button>
+                </div>
+              </form>
+              <br />
+              <div *ngIf="aviso.alert" class="notification is-danger is-light">
+                {{ aviso.message }}
+              </div>
+              <!-- Fin de Formulario -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
